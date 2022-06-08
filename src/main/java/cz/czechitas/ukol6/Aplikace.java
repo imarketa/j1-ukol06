@@ -9,16 +9,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class Aplikace extends JFrame {
-    private JTextField husyField;
     private JLabel husyLabel;
-    private JTextField kraliciField;
+    private JSpinner husyField;
     private JLabel kraliciLabel;
-    private JTextField pocetNohouField;
-    private JLabel pocetNohouLabel;
-    private JTextField pocetHlavField;
+    private JSpinner kraliciField;
+
+    private SpinnerNumberModel kraliciSpinnerModel;
+    private SpinnerNumberModel husySpinnerModel;
+
     private JLabel pocetHlavLabel;
+    private JTextField pocetHlavField;
+    private JLabel pocetNohouLabel;
+    private JTextField pocetNohouField;
 
     private JButton vypocitatButton;
+    private Object actionEvent;
 
     public static void main(String[] args) {
         FlatLightLaf.setup();
@@ -39,49 +44,46 @@ public class Aplikace extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setIconImage(new ImageIcon(Aplikace.class.getResource("czechitas-icon.png")).getImage());
         setLayout(new MigLayout("wrap 2", "[right]rel[50:120:150,grow,fill]"));
-        setMinimumSize(new Dimension(250, 200));
+        setMinimumSize(new Dimension(270, 220));
 
         //TODO implementovat formulář podle zadání
 
-        husyField = new JTextField();
         husyLabel = new JLabel("Husy");
         husyLabel.setDisplayedMnemonic('H');
-        husyField.setHorizontalAlignment(JTextField.TRAILING);
         husyLabel.setLabelFor(husyField);
+        husySpinnerModel = new SpinnerNumberModel(0, 0, null, 1);
+        husyField = new JSpinner(husySpinnerModel);
         add(husyLabel);
         add(husyField);
 
-        kraliciField = new JTextField();
         kraliciLabel = new JLabel("Králíci");
         kraliciLabel.setDisplayedMnemonic('K');
-        kraliciField.setHorizontalAlignment(JTextField.TRAILING);
         kraliciLabel.setLabelFor(kraliciField);
+        kraliciSpinnerModel = new SpinnerNumberModel(0, 0, null, 1);
+        kraliciField = new JSpinner(kraliciSpinnerModel);
         add(kraliciLabel);
         add(kraliciField);
 
-
-        vypocitatButton = new JButton("Vypočítat");
+        vypocitatButton = new JButton("Vypocitat");
         vypocitatButton.setMnemonic('V');
-        getRootPane().setDefaultButton(vypocitatButton);
-        vypocitatButton.addActionListener(this::vypocitejButton);
-        add(vypocitatButton, "span, center");
+        add(vypocitatButton,"center, span");
+        vypocitatButton.addActionListener(this::vypocitatButton);
 
+        add(createButtonBar(), "span");
 
-        pocetHlavLabel = new JLabel("Počet hlav");
         pocetHlavField = new JTextField();
         pocetHlavField.setHorizontalAlignment(JTextField.TRAILING);
         pocetHlavField.setEditable(false);
-        pocetHlavField.setEnabled(true);
+        pocetHlavLabel = new JLabel("Počet hlav");
         pocetHlavLabel.setLabelFor(pocetHlavField);
         add(pocetHlavLabel);
         add(pocetHlavField);
 
-
-        pocetNohouLabel = new JLabel("Počet nohou");
         pocetNohouField = new JTextField();
         pocetNohouField.setHorizontalAlignment(JTextField.TRAILING);
         pocetNohouField.setEditable(false);
-        pocetNohouField.setEnabled(true);
+        pocetHlavField.isEnabled();
+        pocetNohouLabel = new JLabel("Počet nohou");
         pocetNohouLabel.setLabelFor(pocetNohouField);
         add(pocetNohouLabel);
         add(pocetNohouField);
@@ -90,10 +92,10 @@ public class Aplikace extends JFrame {
         pack();
     }
 
-    private void vypocitejButton(ActionEvent actionEvent) {
+    private void vypocitatButton(ActionEvent actionEvent) {
+        int pocetHlavKraliku = (Integer) kraliciField.getValue();
+        int pocetHlavHus = (Integer) husyField.getValue();
 
-        int pocetHlavKraliku = Integer.parseInt(kraliciField.getText());
-        int pocetHlavHus = Integer.parseInt(husyField.getText());
         int pocetHlav = pocetHlavHus + pocetHlavKraliku;
         int pocetNohou = pocetHlavHus * 2 + pocetHlavKraliku * 4;
 
@@ -101,4 +103,10 @@ public class Aplikace extends JFrame {
         pocetNohouField.setText(Integer.toString(pocetNohou));
     }
 
-}
+    private JPanel createButtonBar() {
+        vypocitatButton = new JButton("Vypočítat");
+        JPanel buttonBar = new JPanel(new MigLayout(null, "[right, grow]"));
+        buttonBar.add(vypocitatButton);
+        return buttonBar;
+    }
+    }
