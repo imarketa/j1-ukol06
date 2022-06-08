@@ -66,7 +66,7 @@ public class Aplikace extends JFrame {
 
         vypocitatButton = new JButton("Vypocitat");
         vypocitatButton.setMnemonic('V');
-        add(vypocitatButton,"center, span");
+        add(vypocitatButton, "center, span");
         vypocitatButton.addActionListener(this::vypocitatButton);
 
         add(createButtonBar(), "span");
@@ -109,4 +109,4 @@ public class Aplikace extends JFrame {
         buttonBar.add(vypocitatButton);
         return buttonBar;
     }
-    }
+}
